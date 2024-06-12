@@ -1,0 +1,4 @@
+Django>=3.2,<4.0
+gunicorn
+jazzmin
+# Add other dependencies as needed
