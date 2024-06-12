@@ -1,0 +1,122 @@
+{% extends "store/layouts/main.html" %} {% block content %}
+
+<div class="py-3 bg-primary">
+  <div class="container">
+    <a class="text-white" href="{% url 'home' %}">Home /</a>
+    <a class="text-white" href="{% url 'collections' %}">Collections /</a>
+    <a
+      class="text-white"
+      href="{% url 'collectionsview' product.category.slug%}"
+      >{{product.category.name}} /</a
+    >
+    <a
+      class="text-white"
+      href="{% url 'productview' product.category.slug product.slug%}"
+      >{{product.name}}</a
+    >
+  </div>
+</div>
+
+<div class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card shadow product_data">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                {% if product.tag %}
+                <label class="product-viewing">{{ product.tag}}</label>
+                {% endif %}
+                <img
+                  src="{{product.product_image.url}}"
+                  alt="image"
+                  class="w-100"
+                  style="height: 250px;"
+                />
+              </div>
+             
+              <div class="col-md-8">
+                <h2 class="mb-0">
+                  {{ product.name}} {% if product.trending %}
+                  <label
+                    style="font-size: 16px"
+                    class="float-end badge bg-danger trending_tag"
+                    >Trending</label
+                  >
+                  {% endif %}
+                </h2>
+                <hr />
+                <label class="me-3"
+                  >Original Price :
+                  <s
+                    >Rs {{product.original_price | stringformat:'d' }}
+                  </s></label
+                >
+                <label class="me-3"
+                  >Selling Price :  Rs {{product.selling_price |stringformat:'d' }}  </label
+                >
+                <p class="mt-3">{{product.small_description}}</p>
+                <hr />
+                {% if product.quantity > 0 %}
+                <label class="badge bg-success">In stock</label>
+                {% else %}
+                <label class="badge bg-success">Out of stock</label>
+                {% endif %}
+
+                <div class="row mt-2">
+                  <div class="col-md-3">
+                    {% comment %}  {% endcomment %}
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ product.id }}" class="prod_id">
+                    <label for="Quantity">Quantity</label>
+                    <div
+                      class="input-group text-center mb-3"
+                      style="width: 130px"
+                    >
+                      <button class="input-group-text decrement-btn">-</button>
+                      <input
+                        type="text"
+                        name="quantity"
+                        class="form-control qty-input text-center"
+                        value="1"
+                      />
+                      <button class="input-group-text increment-btn">+</button>
+                    </div>
+                  </div>
+                  <div class="col-md-9">
+                    <br />
+                    {% if product.quantity > 0 %}
+                    <button
+                      type="button"
+                      class="btn btn-primary me-3 float-start addToCartBtn">
+                      Add to cart
+                      <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                    </button>
+                    {% endif %}
+                    <button
+                      type="button"
+                      class="btn btn-success me-3 addToWishlist float-start "
+                    >
+                      Add to Wishlist
+                      <i class="fa fa-heart" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-9">
+              <hr />
+              <h3>Description</h3>
+              <p class="mt-3">{{ product.description}}</p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

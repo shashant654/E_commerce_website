@@ -1,0 +1,183 @@
+{% extends "store/layouts/main.html" %} {% block content %}
+
+<div class="py-2 bg-primary">
+  <div class="container">
+    <a class="text-white" href="{% url 'home' %}">Home /</a>
+    <a class="text-white" href="{% url 'cart' %}">Cart /</a>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <form action="{% url 'placeorder' %}" method="POST">
+          {% csrf_token %}
+    <div class="row">
+      <div
+        class="col-md-12"
+        style="display: flex; margin-bottom: 20px; gap: 30px"
+      >
+        <div class="card shadow checkoutform">
+          <div class="card-body">
+            <h6 style="color:green">Basic Details</h6>
+            <hr />
+            <div class="row">
+              <div class="col-md-6">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  placeholder="Enter first name"
+                  name="fname"
+                />
+              </div>
+              <div class="col-md-6">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  placeholder="Enter last name"
+                  name="lname"
+                />
+              </div>
+              <div class="col-md-6 mt-2">
+                <label>Email</label>
+                <input
+                  type="email"
+                  required
+                  class="form-control"
+                  placeholder="Enter Email"
+                  name="email"
+                />
+              </div>
+              <div class="col-md-6 mt-2">
+                <label>Phone</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  placeholder="Enter Phone"
+                  name = "phone"
+                />
+              </div>
+              <div class="col-md-6 mt-2">
+                <label>Address</label>
+                <textarea
+                  class="form-control"
+                  required
+                  placeholder="Enter Address"
+                  name = "address"
+                ></textarea>
+              </div>
+              <div class="col-md-6 mt-2">
+                <label>City</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  placeholder="Enter City"
+                  name = "city"
+                />
+              </div>
+              <div class="col-md-6 mt-2">
+                <label>State</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  placeholder="Enter State"
+                  name = "state"
+                />
+              </div>
+              <div class="col-md-6 mt-2">
+                <label>Country</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  placeholder="Enter Country"
+                  name = "country"
+                />
+              </div>
+              <div class="col-md-6 mt-2">
+                <label>Pincode</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  placeholder="Enter Pin Code"
+                  name = "pincode"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5">
+          <div class="card shadow">
+            <div class="card-body">
+              <h6 style="color:green">Oreder Summary</h6>
+              <hr />
+              {% if cartitems %}
+              <table class="table table-stripeds table-bordereds">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in cartitems %}
+                  <tr>
+                    <td>
+                      <img
+                        src="{{ item.product.product_image.url }} "
+                        height="50px"
+                        width="50px"
+                      />
+                      {{ item.product.name}}
+                    </td>
+                    <td>{{ item.product_qty}}</td>
+                    <td>{{ item.product.selling_price | stringformat:'d'}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              <h6 class="fw-bold">
+                Grand Total
+                <span class="float-end"
+                  >Rs {{ total_price | stringformat:'d'}}</span
+                >
+              </h6>
+              <input type="hidden" value="COD" name="payment_mode" >
+              <div class="mt-3">
+                <button type="submit" class="btn btn-success w-100">
+                  COD | Place Order
+                </button>
+                <button type="submit" class="btn btn-primary w-100 mt-2 payWithRazorpay">
+                  Pay with Razorpay
+                </button>
+              </div>
+
+              {% else %}
+              <h4>Your cart is empty</h4>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+{% endblock scripts %}
